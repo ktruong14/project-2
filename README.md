@@ -4,7 +4,7 @@ Project 2 Proposal
 Team: Kevin, Sasith, Victor and Shona
 
 Aim: 
-A dashboard that displays 'fun facts' about a country.
+A dashboard that displays top 5-10 'fun facts' about a country.
 
 Method:
 Extract multiple data sources for countries that provide details of 'fun facts'
