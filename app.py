@@ -11,7 +11,7 @@ from flask import Flask, jsonify
 #################################################
 # Database Setup
 #################################################
-database_path = "../countries_info_sqlite.db"
+database_path = "./sqlite_db/countries_info_sqlite.db"
 engine = create_engine(f"sqlite:///{database_path}")
 #engine = create_engine("sqlite:///.countries_info_sqlite")
 
