@@ -1,27 +1,3 @@
-function buildMetadata(sample) {
-    d3.json("samples.json").then((data) => {
-      var metadata = data.metadata;
-      // Filter the data for the object with the desired sample number
-      var resultArray = metadata.filter(sampleObj => sampleObj.id == sample);
-      var result = resultArray[0];
-      // Use d3 to select the panel with id of `#sample-metadata`
-      var PANEL = d3.select("#sample-metadata");
-  
-      // Use `.html("") to clear any existing metadata
-      PANEL.html("");
-  
-      // Use `Object.entries` to add each key and value pair to the panel
-      // Hint: Inside the loop, you will need to use d3 to append new
-      // tags for each key-value in the metadata.
-      Object.entries(result).forEach(([key, value]) => {
-        PANEL.append("h6").text(`${key.toUpperCase()}: ${value}`);
-      });
-  
-      // BONUS: Build the Gauge Chart
-      buildGauge(result.wfreq);
-    });
-  }
-  
   function buildCharts(sample) {
     d3.json("samples.json").then((data) => {
       var samples = data.samples;
@@ -76,32 +52,47 @@ function buildMetadata(sample) {
     });
   }
   
+  function getUnique(arr, comp) {
+
+    // store the comparison  values in array
+    const unique =  arr.map(e => e[comp])
+
+    // store the indexes of the unique objects
+    .map((e, i, final) => final.indexOf(e) === i && i)
+
+    // eliminate the false indexes & return unique objects
+    .filter((e) => arr[e]).map(e => arr[e]);
+
+  return unique;
+}
+
   function init() {
     // Grab a reference to the dropdown select element
     var selector = d3.select("#selDataset");
+    const url = "/api/v1.0/spotify"
   
-    // Use the list of sample names to populate the select options
-    d3.json("samples.json").then((data) => {
-      var sampleNames = data.names;
+    // Use the list of unique countries to populate the select options
+    d3.json(url).then((data) => {
+      var countries = this.getUnique(data, "country");
   
-      sampleNames.forEach((sample) => {
+      countries.forEach((country) => {
         selector
           .append("option")
-          .text(sample)
-          .property("value", sample);
+          .text(country)
+          .property("value", country);
       });
   
-      // Use the first sample from the list to build the initial plots
-      var firstSample = sampleNames[0];
-      buildCharts(firstSample);
-      buildMetadata(firstSample);
+      // Use the first country from the list to build the initial plots
+      var firstCountry = countries[0];
+      buildCharts(firstCountry);
+      buildMetadata(firstCountry);
     });
   }
   
-  function optionChanged(newSample) {
-    // Fetch new data each time a new sample is selected
-    buildCharts(newSample);
-    buildMetadata(newSample);
+  function optionChanged(newCountry) {
+    // Fetch new data each time a new country is selected
+    buildCharts(newCountry);
+    buildMetadata(newCountry);
   }
   
   // Initialize the dashboard
