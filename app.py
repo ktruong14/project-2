@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
 
 from flask import Flask, jsonify
-
+from flask import Flask, render_template
 
 #################################################
 # Database Setup
@@ -38,7 +38,7 @@ app = Flask(__name__)
 
 # create route that renders index.html template
 @app.route("/")
-def home():
+def index():
     return render_template("index.html")
 
 @app.route("/menu")
