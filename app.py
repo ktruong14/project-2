@@ -5,13 +5,13 @@ from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
 
-<<<<<<< HEAD
+
 from flask import Flask, jsonify, render_template
 
-=======
+
 from flask import Flask, jsonify
 from flask import Flask, render_template
->>>>>>> 2f9c68ad36ab00b41a731701d110ccd91f5257f2
+
 
 #################################################
 # Database Setup
