@@ -36,7 +36,12 @@ app = Flask(__name__)
 # Flask Routes
 #################################################
 
+# create route that renders index.html template
 @app.route("/")
+def home():
+    return render_template("index.html")
+
+@app.route("/menu")
 def welcome():
     """List all available api routes."""
     return (
