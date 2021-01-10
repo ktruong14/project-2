@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Bellybutton Biodiversity</title>
+  <title>Country Fun Facts</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 
@@ -19,18 +19,47 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-md-2">
+      <div class="col-md-3">
         <div class="well">
           <h5>Country:</h5>
           <select id="selDataset" onchange="optionChanged(this.value)"></select>
         </div>
-      <div class="col-md-5">
-        <div id="table"></div>
-      </div>
-      <div class="col-md-5">
-        <div id="table"></div>
-      </div>
+      </div> 
     </div>
+    <div class="row">
+      <div class="col-md-8">
+      <h2>Top 10 Most Streamed Songs Weekly on Spotify</h2>
+        <div id="table-area" class= "">
+          <table class="table table-striped" id="spotify-table">
+            <thead>
+              <tr>
+                <th class="table-head">Rank</th>
+                <th class="table-head">Artist</th>
+                <th class="table-head">Song Title</th>
+                <th class="table-head">Streams</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col-md-4">
+      <h2>Highest Ranked University</h2>
+        <div id="table-area" class= "">
+          <table class="table table-striped" id="uni-table">
+            <thead>
+              <tr>
+                <th class="table-head">Country</th>
+                <th class="table-head">University</th>
+                <th class="table-head">Rank</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div> 
+
     <div class="row">
       <div class="col-md-12">
         <div id="bar"></div>
@@ -40,8 +69,9 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-  <script src="plots.js"></script>
-  <script src="{{ url_for('static', filename='js/plots.js') }}"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 
 </body>
 
