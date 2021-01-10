@@ -1,14 +1,15 @@
 const spotifyurl = "/api/v1.0/spotify"
 const uniurl = "/api/v1.0/uni"
+const ramenurl = "/api/v1.0/ramen"
 
 const spotifytbody = d3.select("#spotify-table").select("tbody");
 const unitbody = d3.select("#uni-table").select("tbody");
 
-function buildSpotifyTable() {
+
+//Spotify table function//
+function buildSpotifyTable(count) {
 
   d3.json(spotifyurl).then(function(response){
-
-    // var countries = response.country;
 
     const data = response
 
@@ -16,7 +17,6 @@ function buildSpotifyTable() {
 
     data.forEach((dataRow) => {
       
-      var count = "Australia"
       
       var row = spotifytbody.append("tr");
 
@@ -34,17 +34,20 @@ function buildSpotifyTable() {
           "Song_Title" : song_title,
           "Streams": streams
         })
-        // console.log(rank)
-        // console.log(artist)
-        // console.log(song_title)
-         console.log(newData)
+
+
+        Object.values(newData[0]).forEach((val) => {
+          var cell = row.append("td");
+          cell.text(val);
+            })
           }
-        }
-      );
-    });
-  };
+        });
+      });
+    };
   
-function buildUniTable() {
+
+//University table function//
+function buildUniTable(count) {
 
   d3.json(uniurl).then(function(response){
 
@@ -54,40 +57,85 @@ function buildUniTable() {
   
 
     data.forEach((dataRow) => {
-
       var row = unitbody.append("tr");
 
-      Object.values(dataRow).forEach((val) => {
-        let cell = row.append("td");
+      if (dataRow.country == count){
+        var rank = dataRow.national_rank
+        var university = dataRow.institution
+
+        var newData = [];
+
+        newData.push({
+          "Rank": rank,
+          "University": university
+        })
+
+        console.log(newData[0])
+        
+        Object.values(newData[0]).forEach((val) => {
+          var cell = row.append("td");
           cell.text(val);
-        }
-      );
-    });
-  })
+            })
+          }
+        });
+      });
+    };
+
+//Bar chart for ramen
+function buildRamenChart(count) {
+  d3.json(ramenurl).then(function(response){
+
+    const data = response
+    var resultArray = data.filter(countObj => countObj.country == count)
+
+    brand = []
+    variety = []
+    brand_variety = []
+    stars = []
+
+    var str1 = ": "
+
+    for (i = 0; i < resultArray.length; ++i) {
+      
+      brand.push(resultArray[i].brand)
+      variety.push(resultArray[i].variety)
+      brand_variety.push(resultArray[i].brand.concat(str1, resultArray[i].variety))
+      stars.push(resultArray[i].stars)
+    }
+
+    var yticks = brand_variety.slice(0, 10).map(brand_variety => `${brand_variety}`).sort();
+    var barData = [
+      {
+        y: yticks,
+        x: stars.slice(0, 10).sort(),
+        text: brand_variety.slice(0, 10).sort(),
+        textposition: 'auto',
+        hoverinfo: 'none',
+        type: "bar",
+        orientation: "h",
+      }
+    ];
+
+    var barLayout = {
+      title: "Top 10 Rated Ramen",
+      // hovermode : false,
+      yaxis: {autorange: true,
+        showgrid: false,
+        zeroline: false,
+        showline: false,
+        autotick: true,
+        ticks: '',
+        showticklabels: false},
+      xaxis: {title: "Star Rating"},
+      margin: { t: 30, l: 150 }
+    };
+
+    Plotly.newPlot("bar", barData, barLayout);
+
+  });
 };
 
-//     Plotly.newPlot("bubble", bubbleData, bubbleLayout);
-
-//     var yticks = otu_ids.slice(0, 10).map(otuID => `OTU ${otuID}`).reverse();
-//     var barData = [
-//       {
-//         y: yticks,
-//         x: sample_values.slice(0, 10).reverse(),
-//         text: otu_labels.slice(0, 10).reverse(),
-//         type: "bar",
-//         orientation: "h",
-//       }
-//     ];
-
-//     var barLayout = {
-//       title: "Top 10 Bacteria Cultures Found",
-//       margin: { t: 30, l: 150 }
-//     };
-
-//     Plotly.newPlot("bar", barData, barLayout);
-//   });
-// }
-
+//Get unqiue list of countries    
 function getUnique(arr, comp) {
 
   // store the comparison  values in array
@@ -121,18 +169,23 @@ function init() {
         .append("option")
         .text(country)
         .property("value", country);
+  
+  //Initial graph
+  var firstCountry = "USA";
+  buildSpotifyTable(firstCountry);
+  buildUniTable(firstCountry);
+  buildRamenChart(firstCountry)
     });
   });
 };
 
-init()
-buildSpotifyTable();
-buildUniTable();
 
-// function optionChanged(newCountry) {
-//   // Fetch new data each time a new country is selected
-//   buildCharts(newCountry);
-// }
+function optionChanged(newCountry) {
+  // Fetch new data each time a new country is selected
+  buildSpotifyTable(newCountry);
+  buildUniTable(newCountry)
+  buildRamenChart(newCountry);
+}
 
-// // Initialize the dashboard
-// init();
+// Initialize the dashboard
+init();
