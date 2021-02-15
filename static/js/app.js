@@ -69,8 +69,6 @@ function buildUniTable(count) {
           "Rank": rank,
           "University": university
         })
-
-        console.log(newData[0])
         
         Object.values(newData[0]).forEach((val) => {
           var cell = row.append("td");
@@ -135,6 +133,39 @@ function buildRamenChart(count) {
   });
 };
 
+function buildmap(count) {
+  const width = 900;
+  const height = 400;
+  
+  const svg = d3.select('svg').attr('width', width).attr('height', height);
+  
+  const projection = d3.geoMercator().scale(100)
+      .translate([width / 2, height / 1.4]);
+  const path = d3.geoPath(projection);
+  
+  const g = svg.append('g');
+  
+  d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
+      .then(data => {
+  
+          const countries = topojson.feature(data, data.objects.countries);
+          
+          g.selectAll('path')
+          .data(countries.features)
+          .enter().append('path')
+          .attr('id', function(d) {return d.properties.name.replace(" ", "").replace(" ", "").replace(" ", "")})
+          .attr('d', path);
+
+          // if (count == "USA") {
+          // d3.select("#UnitedStatesofAmerica").attr("fill", "#FF0000") 
+        // } 
+        // else {
+          d3.select("#" + count).attr("fill", "#FF0000")
+        // }
+        console.log("#" + count)
+      });
+    };
+  
 //Get unqiue list of countries    
 function getUnique(arr, comp) {
 
@@ -174,7 +205,8 @@ function init() {
   var firstCountry = "USA";
   buildSpotifyTable(firstCountry);
   buildUniTable(firstCountry);
-  buildRamenChart(firstCountry)
+  buildRamenChart(firstCountry);
+  buildmap(firstCountry)
     });
   });
 };
@@ -183,9 +215,11 @@ function init() {
 function optionChanged(newCountry) {
   // Fetch new data each time a new country is selected
   buildSpotifyTable(newCountry);
-  buildUniTable(newCountry)
+  buildUniTable(newCountry);
   buildRamenChart(newCountry);
+  buildmap(newCountry);
 }
 
 // Initialize the dashboard
 init();
+
